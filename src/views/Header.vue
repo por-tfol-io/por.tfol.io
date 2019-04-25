@@ -73,7 +73,10 @@ export default {
     }
 
     .title {
-      font-size: 4.7em;
+      /*font-size: 4.7em;*/
+      font-size: 2.6em;
+      align-self: flex-end;
+      flex-grow: 1;
 
       .small {
         font-size: .465em;
@@ -81,7 +84,7 @@ export default {
     }
 
     .subtitle {
-      margin-top: -.35em;
+      /*margin-top: -.35em;*/
       font-size: 2.6em;
 
       .small {
