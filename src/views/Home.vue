@@ -10,8 +10,8 @@
     <!-- todo - the about section is arranged as changing (sliding) cards, when the last one -->
     <!-- todo - will invite (and lead) to the gallery -->
 
-    <!--<Icon class="icon" action="toss"/>-->
-    <Icon class="icon" name="magic-wand"/>
+    <Icon class="icon" action="toss"/>
+    <!--<Icon class="icon" name="magic-wand"/>-->
     <!--<Icon class="icon" name="rocket"/>-->
   </div>
 </template>
