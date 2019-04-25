@@ -21,14 +21,13 @@ export default {
   props: {
     items: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-  @import "../styles/global";
 
   .accordion {
     display: flex;
@@ -37,12 +36,14 @@ export default {
     justify-content: stretch;
 
     .item {
+      /* global ref in a component? fixme */
+      --padding: var(--layout-pad);
       box-sizing: border-box;
       position: relative;
       height: 100%;
       flex-grow: 1;
       margin: 0 0 0 2px;
-      padding: $layout-pad 1rem;
+      padding: var(--padding) 1rem;
       overflow: hidden;
       text-overflow: ellipsis;
       text-decoration: none;
@@ -51,14 +52,14 @@ export default {
       transition: width 800ms ease-in-out, padding 800ms ease-in-out;
 
       h2 {
-        margin-bottom: $layout-pad;
+        margin-bottom: var(--padding);
         white-space: nowrap;
         word-break: keep-all;
       }
 
       &:hover {
         width: 200% !important;
-        padding: $layout-pad;
+        padding: var(--padding);
       }
 
       &:after {
