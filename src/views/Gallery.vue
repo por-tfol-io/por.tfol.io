@@ -44,6 +44,14 @@ const flattenArray = (accum, val) => {
   return accum;
 };
 
+const resolveChildPath = (childRoute) => {
+  let path = '/gallery';
+  if (childRoute && childRoute.path) {
+    path += `/${childRoute.path}`;
+  }
+  return path;
+};
+
 export default {
   name: 'Gallery',
   components: {
@@ -70,14 +78,7 @@ export default {
     },
     resolveChildPathByIndex(index) {
       const route = this.childRoutes[index];
-      return this.resolveChildPath(route);
-    },
-    resolveChildPath(childRoute) {
-      let path = '/gallery';
-      if (childRoute && childRoute.path) {
-        path += `/${childRoute.path}`;
-      }
-      return path;
+      return resolveChildPath(route);
     },
   },
   computed: {
@@ -112,7 +113,7 @@ export default {
         .map(route => ({
           title: route.name,
           description: 'lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet.',
-          link: this.resolveChildPath(route),
+          link: resolveChildPath(route),
         }));
     },
   },
