@@ -23,6 +23,8 @@
 import Header from '@/views/Header.vue';
 import ColorAnimator from '@/components/ColorAnimator.vue';
 
+const resolvePathDepth = path => path.split('/').filter(Boolean).length;
+
 export default {
   name: 'App',
   components: {
@@ -46,8 +48,8 @@ export default {
     '$route'(to, from) { // eslint-disable-line
       const fromPath = from.path;
       const toPath = to.path;
-      const fromDepth = fromPath.split('/').length;
-      const toDepth = toPath.split('/').length;
+      const fromDepth = resolvePathDepth(fromPath);
+      const toDepth = resolvePathDepth(toPath);
       // check for child-parent relations
       if (fromDepth !== toDepth && (fromPath.includes(toPath) || toPath.includes(fromPath))) {
         this.transitionName = fromDepth < toDepth ? 'fade-scale-in' : 'fade-scale-out';
