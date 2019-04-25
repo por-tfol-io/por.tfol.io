@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <!--<Icon class="icon" action="loop"/>-->
 
     <!-- todo - start navigation from here. -->
     <!-- todo - navigation concept: -->
@@ -10,9 +9,12 @@
     <!-- todo - the about section is arranged as changing (sliding) cards, when the last one -->
     <!-- todo - will invite (and lead) to the gallery -->
 
-    <Icon class="icon" action="toss"/>
-    <!--<Icon class="icon" name="magic-wand"/>-->
-    <!--<Icon class="icon" name="rocket"/>-->
+    <router-link to="/about">
+      <Icon class="icon" action="toss"/>
+      <!--<Icon class="icon" name="magic-wand"/>-->
+      <!--<Icon class="icon" name="rocket"/>-->
+      <!--<Icon class="icon" action="loop"/>-->
+    </router-link>
   </div>
 </template>
 
@@ -35,6 +37,10 @@ export default {
     align-items: center;
     justify-content: center;
     height: 100%;
+
+    a {
+      text-decoration: none;
+    }
 
     .icon {
       font-size: 20vw;
