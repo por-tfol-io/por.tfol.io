@@ -1,0 +1,39 @@
+/* storm cloud */
+//$color-base: rgb(161, 166, 164);
+//$color-base: rgb(204, 231, 233);
+$color-base: rgb(105, 170, 197);
+$color-content: rgb(242, 235, 220);
+$color-background: rgb(34, 38, 37);
+$color-accent-1: rgb(191, 65, 76);
+$color-accent-2: rgb(140, 20, 30);
+
+/* new one! try it out! */
+//$color-base: #5CB9FF;
+//$color-content: #EDF7FF;
+//$color-background: #002947;
+//$color-accent-1: #FAB650;
+//$color-accent-2: #633C00;
+
+/* flamingo skies */
+//$color-base: #8db1cc;
+//$color-content: #3c7199;
+//$color-background: #cafffa;
+//$color-accent-1: #ff9e8a;
+//$color-accent-2: #cc8e8d;
+
+/* wtf */
+//$color-base: #86CDEB;
+//$color-content: #40788F;
+//$color-background: #453235;
+//$color-accent-1: #D6CB01;
+//$color-accent-2: #ABAA96;
+
+:root {
+  --color-base: #{$color-base};
+  --color-content: #{$color-content};
+  --color-background: #{$color-background};
+  --color-accent-1: #{$color-accent-1};
+  --color-accent-2: #{$color-accent-2};
+}
+
+// todo - figure out a way to connect this color scheme with the imperative references in the router options
