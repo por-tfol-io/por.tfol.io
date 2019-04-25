@@ -1,0 +1,193 @@
+<template>
+  <div class="gallery"
+       :class="mode">
+    <template v-if="isIndex">
+      <AccordionSlider :items="sliderItems"></AccordionSlider>
+    </template>
+    <template v-else>
+      <WebView
+        v-if="url"
+        :url="url"
+        :isFullscreen.sync="isExpanded"
+      />
+      <div v-else># broken link #</div>
+      <div class="fill"></div>
+      <div class="controls">
+        <span class="control expand"
+              tabindex="0"
+              :class="{
+                disabled: !url,
+              }"
+              v-on="{ click: expand }">
+          <Icon name="frame-expand"/>
+        </span>
+        <router-link class="control prev"
+                     :to="prev">
+          <Icon name="chevron-left"/>
+        </router-link>
+        <router-link class="control next"
+                     :to="next">
+          <Icon name="chevron-right"/>
+        </router-link>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script>
+import Icon from '@/components/Icon.vue';
+import WebView from '@/components/WebView.vue';
+import AccordionSlider from '@/components/AccordionSlider.vue';
+
+const flattenArray = (accum, val) => {
+  accum.push(...val);
+  return accum;
+};
+
+export default {
+  name: 'Gallery',
+  components: {
+    Icon,
+    WebView,
+    AccordionSlider,
+  },
+  data() {
+    return {
+      i18n: {},
+      isExpanded: false,
+      childRoutes: [],
+    };
+  },
+  created() {
+    this.childRoutes = this.$router.options.routes
+      .filter(route => route.name === 'gallery')
+      .map(route => route.children)
+      .reduce(flattenArray, []);
+  },
+  methods: {
+    expand() {
+      this.isExpanded = true;
+    },
+    resolveChildPathByIndex(index) {
+      const route = this.childRoutes[index];
+      return this.resolveChildPath(route);
+    },
+    resolveChildPath(childRoute) {
+      let path = '/gallery';
+      if (childRoute && childRoute.path) {
+        path += `/${childRoute.path}`;
+      }
+      return path;
+    },
+  },
+  computed: {
+    mode() {
+      return this.isIndex ? 'toc' : 'page';
+    },
+    isIndex() {
+      return this.$router.currentRoute.name === 'gallery';
+    },
+    currentIndex() {
+      return this.childRoutes.findIndex(route => route.name === this.$router.currentRoute.name);
+    },
+    prev() {
+      const prevIndex = (this.currentIndex - 1 + this.childRoutes.length) % this.childRoutes.length;
+      return this.resolveChildPathByIndex(prevIndex);
+    },
+    next() {
+      const nextIndex = (this.currentIndex + 1) % this.childRoutes.length;
+      return this.resolveChildPathByIndex(nextIndex);
+    },
+    url() {
+      let url = '';
+      const currRoute = this.$router.currentRoute;
+      if (currRoute && currRoute.meta && currRoute.meta.url) {
+        url = currRoute.meta.url; // eslint-disable-line
+      }
+      return url;
+    },
+    sliderItems() {
+      return [].concat(this.childRoutes)
+        .filter(Boolean)
+        .map(route => ({
+          title: route.name,
+          description: 'lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet.',
+          link: this.resolveChildPath(route),
+        }));
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+  @import '../styles/globals';
+
+  $control-size: 1rem;
+
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: stretch;
+    height: 100%;
+
+    .accordion {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--layout-pad);
+      right: 0;
+
+      .item {
+        --padding: var(--layout-pad) !important;
+      }
+    }
+
+    .web-view {
+      width: calc(100vw - #{$header-size} - #{$layout-pad * 2});
+      height: calc((100vw - #{$header-size} - #{$layout-pad * 2}) * .55);
+      border-radius: 5px;
+      border: 3px solid;
+    }
+
+    .fill {
+      flex-grow: 1;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-grow: 0;
+      margin-top: $control-size * 1.5;
+
+      a {
+        text-decoration: none;
+      }
+
+      .control {
+        margin: 0;
+        font-size: $control-size;
+        cursor: pointer;
+
+        &:not(:last-child) {
+          margin-right: $control-size * 1.5;
+        }
+
+        &.disabled {
+          opacity: .5;
+          pointer-events: none;
+        }
+
+        &.expand {
+          font-size: $control-size * 1.25;
+        }
+
+        .icon {
+          font-weight: bold;
+          text-shadow: 1px 1px 3px #999;
+        }
+      }
+    }
+  }
+</style>
