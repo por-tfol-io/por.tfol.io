@@ -20,6 +20,7 @@ export default {
         'github',
         'stackoverflow',
         'linkedin',
+        'toad',
       ],
     };
   },
@@ -28,25 +29,26 @@ export default {
 
 <style scoped lang="scss">
 
+  $icon-size: 2rem;
+
   .contact {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-end;
+    justify-content: center;
     height: 100%;
-    text-align: center;
 
     > :not(:first-child) {
-      margin: 4rem 0 0;
+      margin: var(--layout-pad) 0 0;
     }
 
     ul.social {
-      margin: 4rem auto .2rem;
+      margin: var(--layout-pad) 0 .2rem;
 
       li {
         display: inline-block;
-        width: 32px;
-        height: 32px;
+        width: $icon-size;
+        height: $icon-size;
         mask-size: contain;
         mask-repeat: no-repeat;
         mask-position: 50% 50%;
@@ -54,7 +56,7 @@ export default {
         cursor: pointer;
 
         &:not(:last-child) {
-          margin-right: 1rem;
+          margin-right: $icon-size / 2;
         }
 
         &.github {
@@ -67,11 +69,44 @@ export default {
         }
 
         &.linkedin {
-          width: 40px;
+          width: $icon-size * 1.25;
           mask-image: url('../assets/images/linkedin.svg');
+        }
+
+        &.toad {
+          width: $icon-size * 1.25;
+          // todo - grant attribution (https://www.svgrepo.com/svg/289183/toad)
+          mask-image: url('../assets/images/toad.svg');
+          mask-size: 120% 120%;
+          /*animation: bounceUpDown .5s alternate infinite;*/
         }
       }
     }
   }
+
+  /*
+    @keyframes slideRight {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(200px);
+      }
+    }
+
+    @keyframes bounceUpDown {
+      0% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, .50, .50, 1);
+      }
+      50% {
+        transform: translateY(-50px);
+        animation-timing-function: cubic-bezier(.50, 0, 1, .50);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+  */
 
 </style>
