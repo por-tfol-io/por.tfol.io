@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import About from './views/About.vue';
-import Gallery from './views/Gallery.vue';
+import GalleryIndex from './views/GalleryIndex.vue';
+import GalleryView from './views/GalleryView.vue';
 import Contact from './views/Contact.vue';
 
 Vue.use(Router);
@@ -15,24 +16,42 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/about',
+      path: '/about/:topic(drive|skills|sharing)',
       name: 'about',
       component: About,
+      props: true,
       meta: {
         fgColor: [105, 170, 197], // base color
         bgColor: [34, 38, 37], // background color
       },
+      children: [
+        {
+          path: 'drive',
+          name: 'drive',
+        },
+        {
+          path: 'skills',
+          name: 'skills',
+        },
+        {
+          path: 'sharing',
+          name: 'sharing',
+        },
+      ],
     },
     {
-      path: '/gallery',
+      path: '/about/*',
+      redirect: '/about',
+    },
+    {
+      path: '/about',
+      redirect: '/about/drive',
+    },
+    {
+      path: '/gallery/:childView(dot-css|cinematic|pumpernickel)',
+      component: GalleryView,
       name: 'gallery',
-      component: Gallery,
-      // consider route level code-splitting for the gallery
-      // component: () => import(/* webpackChunkName: "wat" */ './views/Wat.vue'),
-      meta: {
-        fgColor: [242, 235, 220], // content color
-        bgColor: [105, 170, 197], // base color
-      },
+      props: true,
       children: [
         {
           path: 'dot-css',
@@ -49,27 +68,27 @@ export default new Router({
           },
         },
         {
-          path: 'foo-bar',
-          name: 'foo bar',
-          meta: {
-            url: '',
-          },
-        },
-        {
           path: 'pumpernickel',
           name: 'pumpernickel',
           meta: {
             url: '',
           },
         },
-        {
-          path: 'wat',
-          name: 'wat',
-          meta: {
-            url: '',
-          },
-        },
       ],
+    },
+    {
+      path: '/gallery/*',
+      redirect: '/gallery',
+    },
+    {
+      path: '/gallery',
+      component: GalleryIndex,
+      // consider route level code-splitting for the gallery
+      // component: () => import(/* webpackChunkName: "wat" */ './views/Wat.vue'),
+      meta: {
+        fgColor: [242, 235, 220], // content color
+        bgColor: [105, 170, 197], // base color
+      },
     },
     {
       path: '/contact',
