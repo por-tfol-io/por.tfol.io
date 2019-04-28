@@ -41,8 +41,8 @@ export default {
   },
   created() {
     this.basePaths = this.$router.options.routes.map(route => route.path);
-    this.fgColor = this.$router.currentRoute.meta.fgColor;
-    this.bgColor = this.$router.currentRoute.meta.bgColor;
+    this.fgColor = this.$route.meta.fgColor;
+    this.bgColor = this.$route.meta.bgColor;
   },
   watch: {
     '$route'(to, from) { // eslint-disable-line
@@ -50,11 +50,16 @@ export default {
       const toPath = to.path;
       const fromDepth = resolvePathDepth(fromPath);
       const toDepth = resolvePathDepth(toPath);
-      // check for child-parent relations
+      // check for child-parent relations (only on the first depth level, for now)
       if (fromDepth !== toDepth && (fromPath.includes(toPath) || toPath.includes(fromPath))) {
         this.transitionName = fromDepth < toDepth ? 'fade-scale-in' : 'fade-scale-out';
       } else {
-        const ordinal = this.basePaths.indexOf(toPath) > this.basePaths.indexOf(fromPath);
+        const fromPathBaseIndex = this.basePaths.indexOf(fromPath);
+        const toPathBaseIndex = this.basePaths.indexOf(toPath);
+        let ordinal = true; // set the default transition to slide-right
+        if (fromPathBaseIndex !== -1 || toPathBaseIndex !== -1) {
+          ordinal = toPathBaseIndex > fromPathBaseIndex;
+        }
         this.transitionName = ordinal ? 'slide-right' : 'slide-left';
       }
 
@@ -88,6 +93,7 @@ export default {
     }
 
     .main {
+      overflow-x: hidden;
       overflow-y: auto;
 
       .view {
@@ -151,12 +157,12 @@ export default {
 
   .fade-scale-in-enter,
   .fade-scale-out-leave-to {
-    transform: scale(.3);
+    transform: scale(.1);
   }
 
   .fade-scale-out-enter,
   .fade-scale-in-leave-to {
-    transform: scale(3);
+    transform: scale(10);
   }
 
 </style>
