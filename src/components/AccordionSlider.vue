@@ -10,14 +10,22 @@
       }"
     >
       <h2>{{ item.title }}</h2>
-      <p>{{ item.description }}</p>
+      <section>
+        <p>{{ item.description }}</p>
+        <Icon class="more" name="chevron-right-circle"/>
+      </section>
     </router-link>
   </div>
 </template>
 
 <script>
+import Icon from '@/components/Icon.vue';
+
 export default {
   name: 'AccordionSlider',
+  components: {
+    Icon,
+  },
   props: {
     items: {
       type: Array,
@@ -43,25 +51,12 @@ export default {
       height: 100%;
       flex-grow: 1;
       margin: 0 0 0 2px;
-      padding: var(--padding) 1rem;
+      padding: var(--padding) calc(var(--padding) / 4);
       overflow: hidden;
       text-overflow: ellipsis;
-      text-decoration: none;
-      /*transform: skew(-5deg);*/
-      transform-origin: 100% 0;
       transition: width 800ms ease-in-out, padding 800ms ease-in-out;
 
-      h2 {
-        margin-bottom: var(--padding);
-        white-space: nowrap;
-        word-break: keep-all;
-      }
-
-      &:hover {
-        width: 200% !important;
-        padding: var(--padding);
-      }
-
+      // background gradient box
       &:after {
         content: '';
         position: absolute;
@@ -69,7 +64,11 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        background: transparent linear-gradient(0deg, transparent, #fff);
+        background:
+          transparent
+          linear-gradient(0deg, transparent, #fff)
+          no-repeat
+          0 calc(var(--padding) * -1);
         opacity: .2;
         pointer-events: none;
       }
@@ -80,6 +79,50 @@ export default {
 
       :last-child {
         margin-bottom: 0;
+      }
+
+      h2 {
+        position: relative;
+        top: 100%;
+        width: 0;
+        overflow: visible;
+        text-align: right;
+        white-space: nowrap;
+        word-break: keep-all;
+        transform: rotateZ(-90deg);
+        transform-origin: 0 0;
+        transition: top 800ms ease-in-out, width 800ms ease-in-out, transform 840ms ease-in-out;
+      }
+
+      section {
+        margin-top: var(--padding);
+        opacity: 0;
+        transition: opacity 900ms ease-in;
+
+        .more {
+          position: absolute;
+          bottom: var(--padding);
+          right: var(--padding);
+          font-size: 3rem;
+          opacity: var(--opacity-reduced);
+        }
+      }
+
+      &:hover,
+      &:focus {
+        // just a number that's high enough to squish all the other items
+        width: 222% !important;
+        padding: var(--padding);
+
+        h2 {
+          top: 0;
+          width: 100%;
+          transform: rotateZ(0);
+        }
+
+        section {
+          opacity: 1;
+        }
       }
     }
   }
