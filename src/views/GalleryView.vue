@@ -1,18 +1,13 @@
 <template>
-  <div class="gallery"
-       :class="mode">
-    <template v-if="isIndex">
-      <AccordionSlider :items="sliderItems"></AccordionSlider>
-    </template>
-    <template v-else>
-      <WebView
-        v-if="url"
-        :url="url"
-        :isFullscreen.sync="isExpanded"
-      />
-      <div v-else># broken link #</div>
-      <div class="fill"></div>
-      <div class="controls">
+  <div class="gallery-view">
+    <WebView
+      v-if="url"
+      :url="url"
+      :isFullscreen.sync="isExpanded"
+    />
+    <div v-else># broken link #</div>
+    <div class="fill"></div>
+    <div class="controls">
         <span class="control expand"
               tabindex="0"
               :class="{
@@ -21,23 +16,22 @@
               v-on="{ click: expand }">
           <Icon name="frame-expand"/>
         </span>
-        <router-link class="control prev"
-                     :to="prev">
-          <Icon name="chevron-left"/>
-        </router-link>
-        <router-link class="control next"
-                     :to="next">
-          <Icon name="chevron-right"/>
-        </router-link>
-      </div>
-    </template>
+      <router-link class="control prev"
+                   :to="prev">
+        <Icon name="chevron-left"/>
+      </router-link>
+      <router-link class="control next"
+                   :to="next">
+        <Icon name="chevron-right"/>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
+// import childRoutePaging from '@/mixins/child-route-paging';
 import Icon from '@/components/Icon.vue';
 import WebView from '@/components/WebView.vue';
-import AccordionSlider from '@/components/AccordionSlider.vue';
 
 const flattenArray = (accum, val) => {
   accum.push(...val);
@@ -53,20 +47,29 @@ const resolveChildPath = (childRoute) => {
 };
 
 export default {
-  name: 'Gallery',
+  name: 'GalleryView',
   components: {
     Icon,
     WebView,
-    AccordionSlider,
+  },
+  // mixins: [
+  //   childRoutePaging,
+  // ],
+  props: {
+    childView: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       i18n: {},
       isExpanded: false,
-      childRoutes: [],
+      childRoutes: [], // fixme - is this necessary to have it as observable?
     };
   },
   created() {
+    // todo - childRoutes is not necessary here, get rid of it
     this.childRoutes = this.$router.options.routes
       .filter(route => route.name === 'gallery')
       .map(route => route.children)
@@ -82,14 +85,15 @@ export default {
     },
   },
   computed: {
-    mode() {
-      return this.isIndex ? 'toc' : 'page';
-    },
-    isIndex() {
-      return this.$router.currentRoute.name === 'gallery';
-    },
     currentIndex() {
-      return this.childRoutes.findIndex(route => route.name === this.$router.currentRoute.name);
+      // fixme - it seems that when using dynamic route params,
+      // fixme - this.$route is the parent, and not the child route.
+      // fixme - (e.g. gallery/:childView), should we detect this situation somehow and address it?
+
+      // todo - try to use a nested router-view, and see if it solves this issue
+
+      // return this.childRoutes.findIndex(route => route.name === this.$route.name);
+      return this.childRoutes.findIndex(route => route.path === this.childView);
     },
     prev() {
       const prevIndex = (this.currentIndex - 1 + this.childRoutes.length) % this.childRoutes.length;
@@ -101,20 +105,11 @@ export default {
     },
     url() {
       let url = '';
-      const currRoute = this.$router.currentRoute;
+      const currRoute = this.childRoutes[this.currentIndex];
       if (currRoute && currRoute.meta && currRoute.meta.url) {
         url = currRoute.meta.url; // eslint-disable-line
       }
       return url;
-    },
-    sliderItems() {
-      return [].concat(this.childRoutes)
-        .filter(Boolean)
-        .map(route => ({
-          title: route.name,
-          description: 'lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet.',
-          link: resolveChildPath(route),
-        }));
     },
   },
 };
@@ -125,7 +120,7 @@ export default {
 
   $control-size: 1rem;
 
-  .gallery {
+  .gallery-view {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -138,10 +133,6 @@ export default {
       bottom: 0;
       left: var(--layout-pad);
       right: 0;
-
-      .item {
-        --padding: var(--layout-pad) !important;
-      }
     }
 
     .web-view {
@@ -162,10 +153,6 @@ export default {
       flex-grow: 0;
       margin-top: $control-size * 1.5;
 
-      a {
-        text-decoration: none;
-      }
-
       .control {
         margin: 0;
         font-size: $control-size;
@@ -176,7 +163,7 @@ export default {
         }
 
         &.disabled {
-          opacity: .5;
+          opacity: var(--opacity-reduced);
           pointer-events: none;
         }
 
