@@ -11,15 +11,11 @@
 import Icon from '@/components/Icon.vue';
 import AccordionSlider from '@/components/AccordionSlider.vue';
 
-const flattenArray = (accum, val) => {
-  accum.push(...val);
-  return accum;
-};
-
-const resolveChildPath = (childRoute) => {
+// todo - move this to a utility module
+const resolveChildPath = (galleryItem) => {
   let path = '/gallery';
-  if (childRoute && childRoute.path) {
-    path += `/${childRoute.path}`;
+  if (galleryItem && galleryItem.path) {
+    path += `/${galleryItem.path}`;
   }
   return path;
 };
@@ -30,23 +26,13 @@ export default {
     Icon,
     AccordionSlider,
   },
-  created() {
-    // todo - do all that needs to be done with childRoutes here, and pass all
-    // todo - the data down, so the childRoutes reference in Gallery can be removed.
-
-    this.childRoutes = this.$router.options.routes
-      .filter(route => route.name === 'gallery')
-      .map(route => route.children || [])
-      .reduce(flattenArray, []);
-  },
   computed: {
     sliderItems() {
-      return [].concat(this.childRoutes)
-        .filter(Boolean)
-        .map(route => ({
-          title: route.name,
-          description: 'lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet.',
-          link: resolveChildPath(route),
+      return this.$store.state.galleryItems
+        .map(item => ({
+          title: item.name,
+          description: `lorem ipsum dolor sit amet, ${item.name} ${item.name} ${item.name}. lorem ipsum dolor sit amet, lorem ipsum dolor sit amet  ${item.name}.`,
+          link: resolveChildPath(item),
         }));
     },
   },

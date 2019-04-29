@@ -34,33 +34,10 @@ export default new Router({
       redirect: '/about/drive',
     },
     {
-      path: '/gallery/:childView(dot-css|cinematic|pumpernickel)',
+      path: '/gallery/:viewPath(dot-css|cinematic|pumpernickel)',
       component: GalleryView,
       name: 'gallery',
       props: true,
-      children: [
-        {
-          path: 'dot-css',
-          name: 'dot.css',
-          meta: {
-            url: 'https://eliranmal.github.io/dot.css/',
-          },
-        },
-        {
-          path: 'cinematic',
-          name: 'cinematic',
-          meta: {
-            url: 'https://cinematic-8d9a1mf4w.now.sh/',
-          },
-        },
-        {
-          path: 'pumpernickel',
-          name: 'pumpernickel',
-          meta: {
-            url: '',
-          },
-        },
-      ],
     },
     {
       path: '/gallery/*',

@@ -16,12 +16,12 @@
               v-on="{ click: expand }">
           <Icon name="frame-expand"/>
         </span>
-      <router-link class="control prev"
-                   :to="prev">
+      <router-link class="control"
+                   :to="prevPath">
         <Icon name="chevron-left"/>
       </router-link>
-      <router-link class="control next"
-                   :to="next">
+      <router-link class="control"
+                   :to="nextPath">
         <Icon name="chevron-right"/>
       </router-link>
     </div>
@@ -29,19 +29,14 @@
 </template>
 
 <script>
-// import childRoutePaging from '@/mixins/child-route-paging';
+import { mapGetters } from 'vuex';
 import Icon from '@/components/Icon.vue';
 import WebView from '@/components/WebView.vue';
 
-const flattenArray = (accum, val) => {
-  accum.push(...val);
-  return accum;
-};
-
-const resolveChildPath = (childRoute) => {
+const resolveChildPath = (galleryItem) => {
   let path = '/gallery';
-  if (childRoute && childRoute.path) {
-    path += `/${childRoute.path}`;
+  if (galleryItem && galleryItem.path) {
+    path += `/${galleryItem.path}`;
   }
   return path;
 };
@@ -52,11 +47,8 @@ export default {
     Icon,
     WebView,
   },
-  // mixins: [
-  //   childRoutePaging,
-  // ],
   props: {
-    childView: {
+    viewPath: {
       type: String,
       default: '',
     },
@@ -65,45 +57,29 @@ export default {
     return {
       i18n: {},
       isExpanded: false,
-      childRoutes: [], // fixme - is this necessary to have it as observable?
     };
-  },
-  created() {
-    // todo - childRoutes is not necessary here, get rid of it
-    this.childRoutes = this.$router.options.routes
-      .filter(route => route.name === 'gallery')
-      .map(route => route.children)
-      .reduce(flattenArray, []);
   },
   methods: {
     expand() {
       this.isExpanded = true;
     },
-    resolveChildPathByIndex(index) {
-      const route = this.childRoutes[index];
-      return resolveChildPath(route);
-    },
   },
   computed: {
-    currentIndex() {
-      // return this.childRoutes.findIndex(route => route.name === this.$route.name);
-      return this.childRoutes.findIndex(route => route.path === this.childView);
+    ...mapGetters([
+      'getGalleryItemByPath',
+      'getPrevGalleryItemByPath',
+      'getNextGalleryItemByPath',
+    ]),
+    prevPath() {
+      const item = this.getPrevGalleryItemByPath(this.viewPath);
+      return resolveChildPath(item);
     },
-    prev() {
-      const prevIndex = (this.currentIndex - 1 + this.childRoutes.length) % this.childRoutes.length;
-      return this.resolveChildPathByIndex(prevIndex);
-    },
-    next() {
-      const nextIndex = (this.currentIndex + 1) % this.childRoutes.length;
-      return this.resolveChildPathByIndex(nextIndex);
+    nextPath() {
+      const route = this.getNextGalleryItemByPath(this.viewPath);
+      return resolveChildPath(route);
     },
     url() {
-      let url = '';
-      const currRoute = this.childRoutes[this.currentIndex];
-      if (currRoute && currRoute.meta && currRoute.meta.url) {
-        url = currRoute.meta.url; // eslint-disable-line
-      }
-      return url;
+      return this.getGalleryItemByPath(this.viewPath).url;
     },
   },
 };
