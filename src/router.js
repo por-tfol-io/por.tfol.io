@@ -1,14 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
 import Home from './views/Home.vue';
 import About from './views/About.vue';
 import GalleryIndex from './views/GalleryIndex.vue';
 import GalleryView from './views/GalleryView.vue';
 import Contact from './views/Contact.vue';
 
-Vue.use(Router);
-
-export default new Router({
+export default {
   routes: [
     {
       path: '/',
@@ -63,4 +59,4 @@ export default new Router({
       },
     },
   ],
-});
+};
