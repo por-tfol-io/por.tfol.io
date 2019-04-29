@@ -55,7 +55,6 @@ export default {
   },
   data() {
     return {
-      i18n: {},
       isExpanded: false,
     };
   },
@@ -96,14 +95,6 @@ export default {
     align-items: flex-end;
     justify-content: stretch;
     height: 100%;
-
-    .accordion {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: var(--layout-pad);
-      right: 0;
-    }
 
     .web-view {
       width: calc(100vw - #{$header-size} - #{$layout-pad * 2});

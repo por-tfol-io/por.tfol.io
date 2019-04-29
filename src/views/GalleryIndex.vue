@@ -46,10 +46,6 @@ export default {
   $control-size: 1rem;
 
   .gallery-index {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: stretch;
     height: 100%;
 
     .icon {
