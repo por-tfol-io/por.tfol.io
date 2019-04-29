@@ -26,6 +26,10 @@ export default new Vuex.Store({
   },
   getters: {
 
+    galleryItemPaths({ galleryItems }) {
+      return galleryItems.map(item => item.path);
+    },
+
     getGalleryItemByPath: ({ galleryItems }) => (path) => {
       return galleryItems.find(item => item.path === path);
     },

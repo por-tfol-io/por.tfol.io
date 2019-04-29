@@ -5,8 +5,11 @@ import About from './views/About.vue';
 import GalleryIndex from './views/GalleryIndex.vue';
 import GalleryView from './views/GalleryView.vue';
 import Contact from './views/Contact.vue';
+import store from './store';
 
 Vue.use(Router);
+
+const { galleryItemPaths } = store.getters;
 
 export default new Router({
   routes: [
@@ -34,7 +37,7 @@ export default new Router({
       redirect: '/about/drive',
     },
     {
-      path: '/gallery/:viewPath(dot-css|cinematic|pumpernickel)',
+      path: `/gallery/:viewPath(${galleryItemPaths.join('|')})`,
       component: GalleryView,
       name: 'gallery',
       props: true,
