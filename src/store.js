@@ -1,4 +1,9 @@
-export default {
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
   state: {
     // todo - fetch these items from github etc., use a single item as default state (empty view)
     galleryItems: [
@@ -56,4 +61,4 @@ export default {
 
   mutations: {},
   actions: {},
-};
+});
