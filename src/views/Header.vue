@@ -41,16 +41,22 @@ export default {
     align-items: flex-end;
     justify-content: stretch;
     text-align: center;
-    text-transform: uppercase;
     font-size: 1.04rem;
 
     > h1,
     > nav {
       margin: 0;
+      text-transform: uppercase;
     }
 
-    a:not(.router-link-active) {
-      opacity: var(--opacity-reduced);
+    a {
+      &.router-link-exact-active {
+        cursor: default;
+      }
+
+      &:not(.router-link-active) {
+        opacity: var(--opacity-reduced);
+      }
     }
 
     .title,
@@ -60,20 +66,20 @@ export default {
 
       .small {
         display: inline-block;
-        white-space: nowrap;
-        word-break: keep-all;
         margin-bottom: 1.5rem;
         line-height: 0;
+        white-space: nowrap;
+        word-break: keep-all;
         font-weight: bold;
+        text-transform: lowercase;
       }
     }
 
     .title {
       flex-grow: .2;
-      /*font-size: 4.7em;*/
 
       .small {
-        font-size: .45em;
+        font-size: .43em;
       }
     }
 
@@ -81,7 +87,7 @@ export default {
       flex-grow: 1;
 
       .small {
-        font-size: .3em;
+        font-size: .333em;
       }
     }
 
@@ -91,9 +97,10 @@ export default {
 
       a {
         border-bottom: 2px solid;
+        margin-right: .5em;
 
-        &:not(:last-child) {
-          margin-right: .5em;
+        &:last-child {
+          margin-right: 0;
         }
       }
     }
