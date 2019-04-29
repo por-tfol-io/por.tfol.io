@@ -33,14 +33,6 @@ import { mapGetters } from 'vuex';
 import Icon from '@/components/Icon.vue';
 import WebView from '@/components/WebView.vue';
 
-const resolveChildPath = (galleryItem) => {
-  let path = '/gallery';
-  if (galleryItem && galleryItem.path) {
-    path += `/${galleryItem.path}`;
-  }
-  return path;
-};
-
 export default {
   name: 'GalleryView',
   components: {
@@ -70,12 +62,10 @@ export default {
       'getNextGalleryItemByPath',
     ]),
     prevPath() {
-      const item = this.getPrevGalleryItemByPath(this.viewPath);
-      return resolveChildPath(item);
+      return this.getPrevGalleryItemByPath(this.viewPath).path;
     },
     nextPath() {
-      const route = this.getNextGalleryItemByPath(this.viewPath);
-      return resolveChildPath(route);
+      return this.getNextGalleryItemByPath(this.viewPath).path;
     },
     url() {
       return this.getGalleryItemByPath(this.viewPath).url;
@@ -87,7 +77,7 @@ export default {
 <style scoped lang="scss">
   @import '../styles/globals';
 
-  $control-size: 1rem;
+  $control-size: .8rem;
 
   .gallery-view {
     display: flex;
