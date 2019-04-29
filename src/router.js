@@ -24,20 +24,6 @@ export default new Router({
         fgColor: [105, 170, 197], // base color
         bgColor: [34, 38, 37], // background color
       },
-      children: [
-        {
-          path: 'drive',
-          name: 'drive',
-        },
-        {
-          path: 'skills',
-          name: 'skills',
-        },
-        {
-          path: 'sharing',
-          name: 'sharing',
-        },
-      ],
     },
     {
       path: '/about/*',
