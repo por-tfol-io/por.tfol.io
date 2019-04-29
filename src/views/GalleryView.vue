@@ -86,12 +86,6 @@ export default {
   },
   computed: {
     currentIndex() {
-      // fixme - it seems that when using dynamic route params,
-      // fixme - this.$route is the parent, and not the child route.
-      // fixme - (e.g. gallery/:childView), should we detect this situation somehow and address it?
-
-      // todo - try to use a nested router-view, and see if it solves this issue
-
       // return this.childRoutes.findIndex(route => route.name === this.$route.name);
       return this.childRoutes.findIndex(route => route.path === this.childView);
     },
