@@ -30,38 +30,41 @@ export default {
     },
   },
   data() {
+    // maps are ordered, and we need order. use a map and possess order.
+    const topicData = new Map(Object.entries({
+      drive: {
+        icon: 'magnifier',
+        text: [
+          `curiosity is what drives me, and learning is what i love and do best.`,
+          `i'm always on the search for new things to discover.`,
+        ],
+      },
+      skills: {
+        icon: 'code',
+        text: [
+          `i do web and full-stack development. language agnostic, but excel in javascript.`,
+          `enthusiastic about functional programming, IOT, cloud computing, software architecture and design, quantum computing...`,
+          `absolutely fascinated by user experience (as well as developer experience).`,
+        ],
+      },
+      sharing: {
+        icon: 'heart',
+        text: [
+          `along the path, i have the chance to share the things i learn with amazing people who share back.`,
+          'through these connections i had mentored developers, conducted seminars and courses, hosted technology events and instructed hackathons.',
+          'open source is important to me (and so is open science/data).',
+        ],
+      },
+    }));
     return {
-      topics: new Map(Object.entries({
-        drive: {
-          icon: 'magnifier',
-          text: [
-            `curiosity is what drives me, and learning is what i love and do best.`,
-            `i'm always on the search for new things to discover.`,
-          ],
-        },
-        skills: {
-          icon: 'code',
-          text: [
-            `i do web and full-stack development. language agnostic, but excel in javascript.`,
-            `enthusiastic about functional programming, IOT, cloud computing, software architecture and design, quantum computing...`,
-            `absolutely fascinated by user experience (as well as developer experience).`,
-          ],
-        },
-        sharing: {
-          icon: 'heart',
-          text: [
-            `along the path, i have the chance to share the things i learn with amazing people who share back.`,
-            'through these connections i had mentored developers, conducted seminars and courses, hosted technology events and instructed hackathons.',
-            'open source is important to me (and so is open science/data).',
-          ],
-        },
-      })),
+      topicData,
+      topics: [...topicData.keys()],
     };
   },
   methods: {
     getTopicPropValue(propKey) {
       let icon;
-      const data = this.topics.get(this.topic);
+      const data = this.topicData.get(this.topic);
       if (data) {
         icon = data[propKey]; // eslint-disable-line
       }
@@ -76,18 +79,14 @@ export default {
       return this.getTopicPropValue('text');
     },
     nextTopic() {
-      const topicKeys = [...this.topics.keys()];
-      const currIndex = topicKeys.findIndex(key => key === this.topic);
-      return topicKeys[currIndex + 1];
+      const currIndex = this.topics.findIndex(t => t === this.topic);
+      return this.topics[currIndex + 1];
     },
     topicNextPath() {
-      let path;
       if (this.nextTopic) {
-        path = `/about/${this.nextTopic}`;
-      } else {
-        path = '/gallery';
+        return `/about/${this.nextTopic}`;
       }
-      return path;
+      return '/gallery';
     },
   },
 };
