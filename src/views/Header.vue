@@ -61,7 +61,7 @@ export default {
 
     .title,
     .subtitle {
-      margin-top: -.35em;
+      margin-top: -.4em;
       font-size: 2.6em;
 
       .small {
