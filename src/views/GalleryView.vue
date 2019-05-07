@@ -122,7 +122,7 @@ export default {
     height: 100%;
 
     .icon {
-      display: inline-block;
+      display: block;
       margin: 0 0 .5em;
       font-size: 6rem;
     }
