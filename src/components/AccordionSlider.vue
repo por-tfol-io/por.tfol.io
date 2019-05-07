@@ -12,8 +12,11 @@
       <h2>{{ item.title }}</h2>
       <section>
         <p>{{ item.description }}</p>
-        <Icon class="more" name="chevron-right-circle"/>
       </section>
+      <div class="enter">
+        {{ i18n.more }}
+        <Icon name="enter"/>
+      </div>
     </router-link>
   </div>
 </template>
@@ -32,6 +35,13 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      i18n: {
+        more: 'see more',
+      },
+    };
+  },
 };
 </script>
 
@@ -44,16 +54,20 @@ export default {
     justify-content: stretch;
 
     .item {
-      /* global ref in a component? fixme */
+      /* global ref in a component? fixme! */
       --padding: var(--layout-pad);
-      box-sizing: border-box;
+      // required for positioning the gradient fill pseudo element
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+      box-sizing: border-box;
       height: 100%;
       flex-grow: 1;
       margin: 0 0 0 2px;
       padding: var(--padding) calc(var(--padding) / 4);
       overflow: hidden;
-      text-overflow: ellipsis;
       transition: width 800ms ease-in-out, padding 800ms ease-in-out;
 
       // background gradient box
@@ -64,21 +78,16 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        background:
-          transparent
-          linear-gradient(0deg, transparent, #fff)
-          no-repeat
-          0 calc(var(--padding) * -1);
+        background: transparent linear-gradient(0deg, transparent, #fff) no-repeat;
+        background-position: 0 calc(var(--padding) * -1);
         opacity: .2;
         pointer-events: none;
       }
 
-      :first-child {
-        margin-top: 0;
-      }
-
-      :last-child {
-        margin-bottom: 0;
+      > :first-child,
+      > :last-child {
+        flex-grow: 0;
+        margin: 0;
       }
 
       h2 {
@@ -91,20 +100,39 @@ export default {
         word-break: keep-all;
         transform: rotateZ(-90deg);
         transform-origin: 0 0;
-        transition: top 800ms ease-in-out, width 800ms ease-in-out, transform 840ms ease-in-out;
+        transition: top 700ms ease-in-out, width 700ms ease-in-out, transform 740ms ease-in-out;
+      }
+
+      section,
+      .enter {
+        opacity: 0;
+        transition: opacity 800ms ease-in;
       }
 
       section {
-        margin-top: var(--padding);
-        opacity: 0;
-        transition: opacity 900ms ease-in;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        overflow: hidden;
+        margin: 2em 0;
 
-        .more {
-          position: absolute;
-          bottom: var(--padding);
-          right: var(--padding);
-          font-size: 3rem;
-          opacity: var(--opacity-reduced);
+        p {
+          text-overflow: ellipsis;
+        }
+      }
+
+      .enter {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        transition: none 0s;
+
+        .icon {
+          margin-left: .5rem;
+          font-size: 1.5rem;
         }
       }
 
@@ -112,7 +140,7 @@ export default {
       &:focus {
         // just a number that's high enough to squish all the other items
         width: 222% !important;
-        padding: var(--padding);
+        padding: var(--padding) calc(var(--padding) / 2);
 
         h2 {
           top: 0;
@@ -122,6 +150,14 @@ export default {
 
         section {
           opacity: 1;
+        }
+
+        .enter {
+          opacity: var(--opacity-reduced);
+
+          &:hover {
+            opacity: 1;
+          }
         }
       }
     }
