@@ -4,14 +4,14 @@
     class="loop" tag="div" name="slide">
     <span
       v-for="number in [iconIndex]" v-bind:key="number"
-      class="icon lnr"
+      class="icon"
       :class="iconClass"
       @click="loop"
     ></span>
   </transition-group>
   <span
     v-else
-    class="icon lnr"
+    class="icon"
     :class="iconClass"
     v-on="iconBindings"
   ></span>
@@ -82,7 +82,7 @@ export default {
       }
     },
     toss() {
-      if (this.name) {
+      if (this.hasName) {
         return;
       }
 
@@ -99,7 +99,7 @@ export default {
       }, tossDelay);
     },
     loop() {
-      if (this.name) {
+      if (this.hasName) {
         return;
       }
 
@@ -115,9 +115,13 @@ export default {
     },
   },
   computed: {
+    hasName() {
+      // use type check because empty string is a legal value; empty string means empty icon
+      return typeof this.name === 'string';
+    },
     iconName() {
       let iconName;
-      if (this.name) {
+      if (this.hasName) {
         iconName = this.name;
       } else {
         iconName = iconNames[this.iconIndex];
@@ -125,13 +129,18 @@ export default {
       return iconName;
     },
     iconClass() {
-      const lnrClass = `lnr-${this.iconName}`;
-      const animation = this.spinning ? 'spin' : '';
-      return `${lnrClass} ${animation}`;
+      const cls = [];
+      if (this.iconName) {
+        cls.push(`lnr lnr-${this.iconName}`);
+      }
+      if (this.spinning) {
+        cls.push('spin');
+      }
+      return cls.join(' ');
     },
     iconBindings() {
       let b = null;
-      if (!this.name) {
+      if (this.hasName) {
         b = {
           click: this.resolveActionDispatcher(),
         };
