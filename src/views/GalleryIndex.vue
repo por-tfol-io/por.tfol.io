@@ -1,18 +1,15 @@
 <template>
   <div class="gallery-index">
-    <Icon class="watermark" name="rocket"/>
     <AccordionSlider :items="sliderItems">
-      <!--todo - inject the items via slots, then we can style them here-->
+      <!--todo - inject the items via slots, then style them in here-->
     </AccordionSlider>
   </div>
 </template>
 
 <script>
-import Icon from '@/components/Icon.vue';
 import AccordionSlider from '@/components/AccordionSlider.vue';
 
-// todo - move this to a utility module
-const resolveChildPath = (galleryItem) => {
+const resolveLink = (galleryItem) => {
   let path = '/gallery';
   if (galleryItem && galleryItem.path) {
     path += `/${galleryItem.path}`;
@@ -23,16 +20,16 @@ const resolveChildPath = (galleryItem) => {
 export default {
   name: 'GalleryIndex',
   components: {
-    Icon,
     AccordionSlider,
   },
   computed: {
     sliderItems() {
+      // todo - change accordion api to accept only a slot as template, and ditch this mapping
       return this.$store.state.galleryItems
         .map(item => ({
           title: item.name,
           description: `lorem ipsum dolor sit amet, ${item.name} ${item.name} ${item.name}. lorem ipsum dolor sit amet, lorem ipsum dolor sit amet  ${item.name}.`,
-          link: resolveChildPath(item),
+          link: resolveLink(item),
         }));
     },
   },
@@ -41,27 +38,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import '../styles/globals';
-
-  $control-size: 1rem;
 
   .gallery-index {
     height: 100%;
-
-    .icon {
-      /* todo - encapsulate and move to app, and put in its own router-view. */
-      /* todo - use opposite transitions to the main router-view */
-      &.watermark {
-        position: absolute;
-        top: $layout-pad * -1;
-        left: -10vh;
-        font-size: 100vh;
-        opacity: .1;
-        // don't disturb the scroll of the content element
-        pointer-events: none;
-      }
-    }
-
 
     .accordion {
       position: absolute;
@@ -71,4 +50,5 @@ export default {
       right: 0;
     }
   }
+
 </style>
