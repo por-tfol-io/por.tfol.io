@@ -182,7 +182,7 @@ export default {
         }
 
         &.disabled {
-          opacity: calc(var(--opacity-reduced) / 1.5);
+          opacity: calc(var(--opacity-reduced) * .666);
           pointer-events: none;
         }
 
