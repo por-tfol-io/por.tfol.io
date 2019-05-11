@@ -17,6 +17,9 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        iconName: '',
+      },
     },
     {
       path: '/about/:topic(drive|skills|sharing)',
@@ -41,6 +44,9 @@ export default new Router({
       component: GalleryView,
       name: 'gallery',
       props: true,
+      meta: {
+        iconName: 'rocket',
+      },
     },
     {
       path: '/gallery/*',
@@ -54,6 +60,7 @@ export default new Router({
       meta: {
         fgColor: [242, 235, 220], // content color
         bgColor: [105, 170, 197], // base color
+        iconName: 'rocket',
       },
     },
     {
@@ -63,6 +70,7 @@ export default new Router({
       meta: {
         fgColor: [140, 20, 30], // accent 2 color
         bgColor: [242, 235, 220], // content color
+        iconName: 'earth',
       },
     },
   ],

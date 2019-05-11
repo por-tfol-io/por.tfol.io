@@ -12,16 +12,18 @@
     </div>
     <div class="fill"></div>
     <div class="controls">
-      <router-link class="control"
-                   :to="prevPath">
-        <Icon name="arrow-left"/>
-        {{ i18n.label.prev }}
+      <!--todo - extract these to a component-->
+      <router-link class="control exit"
+                   to="/gallery">
+        <Icon name="exit"/>
+        {{ i18n.label.exit }}
       </router-link>
-      <router-link class="control"
-                   :to="nextPath">
-        <Icon name="arrow-right"/>
-        {{ i18n.label.next }}
-      </router-link>
+      <span class="control info"
+            tabindex="0"
+            v-on="{ click: showInfo }">
+        <Icon name="question-circle"/>
+        {{ i18n.label.info }}
+      </span>
       <span class="control expand"
             tabindex="0"
             :class="{
@@ -31,16 +33,15 @@
         <Icon name="frame-expand"/>
         {{ i18n.label.expand }}
       </span>
-      <span class="control info"
-            tabindex="0"
-            v-on="{ click: showInfo }">
-        <Icon name="question-circle"/>
-        {{ i18n.label.info }}
-      </span>
-      <router-link class="control exit"
-                   to="/gallery">
-        <Icon name="exit"/>
-        {{ i18n.label.exit }}
+      <router-link class="control"
+                   :to="prevPath">
+        <Icon name="arrow-left"/>
+        {{ i18n.label.prev }}
+      </router-link>
+      <router-link class="control"
+                   :to="nextPath">
+        <Icon name="arrow-right"/>
+        {{ i18n.label.next }}
       </router-link>
     </div>
   </div>
@@ -91,18 +92,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getGalleryItemByPath',
-      'getPrevGalleryItemByPath',
-      'getNextGalleryItemByPath',
+      'getGalleryItem',
+      'getPrevGalleryItem',
+      'getNextGalleryItem',
     ]),
     prevPath() {
-      return this.getPrevGalleryItemByPath(this.viewPath).path;
+      return this.getPrevGalleryItem(this.viewPath).path;
     },
     nextPath() {
-      return this.getNextGalleryItemByPath(this.viewPath).path;
+      return this.getNextGalleryItem(this.viewPath).path;
     },
     url() {
-      return this.getGalleryItemByPath(this.viewPath).url;
+      return this.getGalleryItem(this.viewPath).url;
     },
   },
 };

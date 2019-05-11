@@ -4,7 +4,9 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+
   state: {
+    watermarkIconName: null,
     // todo - fetch these items from github etc., use a single item as default state (empty view)
     galleryItems: [
       {
@@ -23,46 +25,116 @@ export default new Vuex.Store({
         url: '',
       },
     ],
+    topics: [
+      {
+        name: 'drive',
+        icon: 'magnifier',
+        text: [
+          `curiosity is what drives me, and learning is what i love and do best.`,
+          `i'm always on the search for new things to discover.`,
+        ],
+      },
+      {
+        name: 'skills',
+        icon: 'code',
+        text: [
+          `i do web and full-stack development. language agnostic, but excel in javascript.`,
+          `enthusiastic about functional programming, cloud computing, software architecture and design, quantum computing, IOT...`,
+          `absolutely fascinated by design and user experience.`,
+        ],
+      },
+      {
+        name: 'sharing',
+        icon: 'heart-pulse',
+        text: [
+          `i have the privilege to share the things i learn with amazing people who share back.`,
+          'along the path, i had mentored developers, conducted seminars and courses, hosted technology events and instructed hackathons.',
+          // 'open source is important to me (and so is open science/data). i advocate its premise where ever i go, and regularly contribute to open source projects.',
+          'open source is important to me (and so is open science/data).',
+        ],
+      },
+    ],
   },
+
   getters: {
 
     galleryItemPaths({ galleryItems }) {
       return galleryItems.map(item => item.path);
     },
 
-    getGalleryItemByPath: ({ galleryItems }) => (path) => {
+    getGalleryItem: ({ galleryItems }) => (path) => {
       return galleryItems.find(item => item.path === path);
     },
-    getGalleryItemIndexByPath: ({ galleryItems }) => (path) => {
+
+    getGalleryItemIndex: ({ galleryItems }) => (path) => {
       return galleryItems.findIndex(item => item.path === path);
     },
-    getPrevGalleryItemIndexByPath: (
+
+    getPrevGalleryItemIndex: (
       { galleryItems },
-      { getGalleryItemIndexByPath },
+      { getGalleryItemIndex },
     ) => (currPath) => {
-      return (getGalleryItemIndexByPath(currPath) - 1 + galleryItems.length) % galleryItems.length;
+      return (getGalleryItemIndex(currPath) - 1 + galleryItems.length) % galleryItems.length;
     },
-    getNextGalleryItemIndexByPath: (
+
+    getNextGalleryItemIndex: (
       { galleryItems },
-      { getGalleryItemIndexByPath },
+      { getGalleryItemIndex },
     ) => (currPath) => {
-      return (getGalleryItemIndexByPath(currPath) + 1) % galleryItems.length;
+      return (getGalleryItemIndex(currPath) + 1) % galleryItems.length;
     },
-    getPrevGalleryItemByPath: (
+
+    getPrevGalleryItem: (
       { galleryItems },
-      { getPrevGalleryItemIndexByPath },
+      { getPrevGalleryItemIndex },
     ) => (currPath) => {
-      return galleryItems[getPrevGalleryItemIndexByPath(currPath)];
+      return galleryItems[getPrevGalleryItemIndex(currPath)];
     },
-    getNextGalleryItemByPath: (
+
+    getNextGalleryItem: (
       { galleryItems },
-      { getNextGalleryItemIndexByPath },
+      { getNextGalleryItemIndex },
     ) => (currPath) => {
-      return galleryItems[getNextGalleryItemIndexByPath(currPath)];
+      return galleryItems[getNextGalleryItemIndex(currPath)];
+    },
+
+
+    getTopic: ({ topics }) => (topicName) => {
+      return topics.find(t => t.name === topicName);
+    },
+
+    getTopicIndex: ({ topics }) => (topicName) => {
+      return topics.findIndex(t => t.name === topicName);
+    },
+
+    getNextTopic: (
+      { topics },
+      { getTopicIndex },
+    ) => (topicName, isCyclic) => {
+      const currIndex = getTopicIndex(topicName);
+      const nextIndex = isCyclic ? (currIndex + 1) % topics.length : currIndex + 1;
+      return topics[nextIndex];
+    },
+
+    getTopicPropValue: (state, { getTopic }) => (topicName, propKey) => {
+      let propValue;
+      const data = getTopic(topicName);
+      if (data) {
+        propValue = data[propKey]; // eslint-disable-line
+      }
+      return propValue;
     },
 
   },
 
-  mutations: {},
+  mutations: {
+
+    updateWatermarkIconName(state, { watermarkIconName }) {
+      state.watermarkIconName = watermarkIconName; // eslint-disable-line no-param-reassign
+    },
+
+  },
+
   actions: {},
+
 });
